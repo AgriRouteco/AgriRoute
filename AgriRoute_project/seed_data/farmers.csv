@@ -1,0 +1,4 @@
+id,farm_name,contact_name,email,distance_km,verified
+1,Green Vale,L. Green,l.green@example.com,6,yes
+2,Hillside Farm,A. Hill,a.hill@example.com,12,yes
+3,River Produce,M. River,m.river@example.com,3,no
