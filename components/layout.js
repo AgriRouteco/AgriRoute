@@ -1,4 +1,4 @@
-// components/Layout.js
+// components/layout.js
 import Link from 'next/link'
 
 export default function Layout({ children }) {
