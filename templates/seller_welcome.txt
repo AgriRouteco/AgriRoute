@@ -1,0 +1,20 @@
+Subject: Welcome to AgriRoute — Next steps to get selling
+
+Hi {seller_name},
+
+Welcome — thanks for joining AgriRoute
+
+Quick checklist to start selling:
+1. Complete your profile (farm name, address, short bio).
+2. Upload at least 3 clear photos of your produce and one photo of your farm.
+3. Create your first listing (product name, price/kg, available qty, min qty).
+4. Add bank details so you can receive payouts.
+
+Verification: We’ll review your uploads within 48 hours. You’ll receive a "Verified" badge once approved.
+
+Fees: We charge a low platform fee (3%) on sales and a small listing fee (£0.10). We keep fees low to support farmers.
+
+If you need help, reply to this email or join our onboarding call: {onboarding_call_link}
+
+Best,
+AgriRoute Team
