@@ -1,0 +1,6 @@
+id,farm_id,product,price_per_unit,unit,available_qty,min_qty,sell_to
+1,1,Apples,1.8,kg,120,1,both
+2,1,Tomatoes,1.9,kg,80,2,both
+3,2,Potatoes,0.7,kg,500,5,both
+4,2,Carrots,0.85,kg,200,1,retail
+5,3,Free-range Eggs,0.2,egg,1000,6,both
