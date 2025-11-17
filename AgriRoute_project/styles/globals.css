@@ -1,5 +1,0 @@
-/* Simple baseline styles */
-html,body { padding:0; margin:0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:#f8fafc; color:#111827; }
-a { color: inherit; text-decoration: none; }
-.container { max-width:1024px; margin:0 auto; padding:24px; }
-.card { background:white; border-radius:8px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); padding:16px; }
