@@ -6,8 +6,10 @@ export default function Signup() {
 
     const email = e.target.email.value
     const password = e.target.password.value
-    const role = e.target.role.value
+    const role = e.target.role.value   // 'farmer' or 'customer'
+    const farmName = e.target.farmName?.value || null
 
+    // 1. Create Supabase auth user
     const { data, error } = await supabase.auth.signUp({
       email,
       password
@@ -18,31 +20,39 @@ export default function Signup() {
       return
     }
 
-    // Add profile row
+    // 2. Insert into profiles table
     await supabase.from("profiles").insert({
       id: data.user.id,
-      role
+      email,
+      role,
+      farm_name: farmName,
+      bio: "",
     })
 
-    alert("Account created! Please check your email to verify.")
+    alert("Signup successful!")
   }
 
   return (
-    <div style={{ padding: 40 }}>
+    <div style={{ maxWidth: 500, margin: "40px auto" }}>
       <h1>Create Account</h1>
-      <form onSubmit={handleSignup}>
-        <input name="email" placeholder="email" /><br/>
-        <input name="password" type="password" placeholder="password" /><br/>
-        
-        <label>
-          Role: 
-          <select name="role">
-            <option value="buyer">Buyer</option>
-            <option value="farmer">Farmer</option>
-          </select>
-        </label><br/>
 
-        <button type="submit">Sign Up</button>
+      <form onSubmit={handleSignup}>
+        <label>Email</label>
+        <input name="email" required type="email" />
+
+        <label>Password</label>
+        <input name="password" required type="password" />
+
+        <label>Account Type</label>
+        <select name="role">
+          <option value="customer">Customer</option>
+          <option value="farmer">Farmer</option>
+        </select>
+
+        <label>Farm Name (Farmers Only)</label>
+        <input name="farmName" placeholder="If farmer" />
+
+        <button type="submit">Create Account</button>
       </form>
     </div>
   )
