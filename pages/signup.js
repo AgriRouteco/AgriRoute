@@ -1,59 +1,39 @@
-import { supabase } from "../lib/supabaseClient"
-
 export default function Signup() {
-  async function handleSignup(e) {
-    e.preventDefault()
-
-    const email = e.target.email.value
-    const password = e.target.password.value
-    const role = e.target.role.value   // 'farmer' or 'customer'
-    const farmName = e.target.farmName?.value || null
-
-    // 1. Create Supabase auth user
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password
-    })
-
-    if (error) {
-      alert(error.message)
-      return
-    }
-
-    // 2. Insert into profiles table
-    await supabase.from("profiles").insert({
-      id: data.user.id,
-      email,
-      role,
-      farm_name: farmName,
-      bio: "",
-    })
-
-    alert("Signup successful!")
-  }
-
   return (
-    <div style={{ maxWidth: 500, margin: "40px auto" }}>
-      <h1>Create Account</h1>
+    <div style={{maxWidth: 400, margin: "50px auto", textAlign: "center"}}>
+      <h1 style={{fontSize: 24, fontWeight: 600}}>Create an Account</h1>
+      
+      <p style={{marginTop: 10}}>Choose who you are signing up as</p>
 
-      <form onSubmit={handleSignup}>
-        <label>Email</label>
-        <input name="email" required type="email" />
+      <a 
+        href="/signup-customer"
+        style={{
+          display: "block",
+          background: "#16a34a",
+          color: "white",
+          padding: 15,
+          borderRadius: 6,
+          marginTop: 25,
+          textDecoration: "none"
+        }}
+      >
+        I’m a Customer
+      </a>
 
-        <label>Password</label>
-        <input name="password" required type="password" />
-
-        <label>Account Type</label>
-        <select name="role">
-          <option value="customer">Customer</option>
-          <option value="farmer">Farmer</option>
-        </select>
-
-        <label>Farm Name (Farmers Only)</label>
-        <input name="farmName" placeholder="If farmer" />
-
-        <button type="submit">Create Account</button>
-      </form>
+      <a 
+        href="/signup-farmer"
+        style={{
+          display: "block",
+          background: "#2563eb",
+          color: "white",
+          padding: 15,
+          borderRadius: 6,
+          marginTop: 20,
+          textDecoration: "none"
+        }}
+      >
+        I’m a Farmer
+      </a>
     </div>
   )
 }
