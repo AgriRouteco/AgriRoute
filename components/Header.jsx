@@ -72,14 +72,16 @@ export default function Header({ user }) {
             </Link>
           ) : (
          <div style={{ display: "flex", gap: "10px" }}>
-   <Link href="/login">
-  <button style={{
-    border: "1px solid #16a34a",
-    color: "#16a34a",
-    padding: "8px 12px",
-    borderRadius: "6px",
-    fontWeight: 600
-  }}>
+  <Link href="/login">
+  <button
+    style={{
+      border: "1px solid #16a34a",
+      color: "#16a34a",
+      padding: "8px 12px",
+      borderRadius: "6px",
+      fontWeight: 600,
+    }}
+  >
     Login / Signup
   </button>
 </Link>
