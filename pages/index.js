@@ -9,8 +9,6 @@ export default function Home() {
     { name: 'Eggs', price: 0.20, unit: 'egg', change: 0.00 },
   ]
 
-  return (
- 
 </a>
               <div style={{color:'#6b7280', fontSize:13}}>Direct from farmers</div>
             </div>
