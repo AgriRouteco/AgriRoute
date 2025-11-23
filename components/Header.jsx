@@ -28,8 +28,8 @@ export default function Header({ user }) {
         alignItems: "center",
         justifyContent: "space-between"
       }}>
-        
-        {/* Logo / Home Button */}
+
+        {/* Logo */}
         <div style={{ cursor: "pointer" }}>
           <Link href="/">
             <div style={{ fontSize: "22px", fontWeight: 700 }}>
@@ -56,49 +56,34 @@ export default function Header({ user }) {
           ))}
         </nav>
 
-    {/* Account */}
-<div>
-  {user ? (
-    <Link href="/account">
-      <button style={{
-        background: "#16a34a",
-        color: "white",
-        padding: "8px 12px",
-        borderRadius: "6px",
-        fontWeight: 600
-      }}>
-        Account
-      </button>
-    </Link>
-  ) : (
-    <Link href="/login">
-      <button
-        style={{
-          border: "1px solid #16a34a",
-          color: "#16a34a",
-          padding: "8px 12px",
-          borderRadius: "6px",
-          fontWeight: 600,
-        }}
-      >
-        Login / Signup
-      </button>
-    </Link>
-  )}
-</div>
-
-    <Link href="/signup">
-        <button style={{
-            background: "#163a4a",
-            color: "white",
-            padding: "8px 12px",
-            borderRadius: "6px",
-            fontWeight: 600
-        }}>
-            Sign Up
-        </button>
-    </Link>
-</div>
+        {/* Account Area */}
+        <div>
+          {user ? (
+            <Link href="/account">
+              <button style={{
+                background: "#16a34a",
+                color: "white",
+                padding: "8px 12px",
+                borderRadius: "6px",
+                fontWeight: 600
+              }}>
+                Account
+              </button>
+            </Link>
+          ) : (
+            <Link href="/login">
+              <button
+                style={{
+                  border: "1px solid #16a34a",
+                  color: "#16a34a",
+                  padding: "8px 12px",
+                  borderRadius: "6px",
+                  fontWeight: 600
+                }}
+              >
+                Login / Signup
+              </button>
+            </Link>
           )}
         </div>
 
