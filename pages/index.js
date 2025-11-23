@@ -15,10 +15,7 @@ export default function Home() {
         <header style={{background:'#fff', boxShadow:'0 1px 3px rgba(0,0,0,0.06)'}}>
           <div style={{maxWidth:1024, margin:'0 auto', padding:16, display:'flex', justifyContent:'space-between', alignItems:'center'}}>
             <div>
-              <a href="/" style={{ fontSize: 20, fontWeight: 700 }}>
-  AgriRoute — Direct From Farmers
-</a>
-             
+              
           </div>
         </header>
 
