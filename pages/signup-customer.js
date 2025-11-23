@@ -4,7 +4,7 @@ export default function SignupCustomer() {
       <h1 style={{fontSize: 24, fontWeight: 600}}>Customer Signup</h1>
 
       <form>
-        <label>Name</label>
+        <label>Your Name</label>
         <input type="text" placeholder="Full name" style={{width:"100%", padding:10, margin:"10px 0"}} />
 
         <label>Email</label>
@@ -23,7 +23,7 @@ export default function SignupCustomer() {
             marginTop: 10
           }}
         >
-          Create Account
+          Create Customer Account
         </button>
       </form>
     </div>
