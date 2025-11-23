@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Header from '../components/Header'
 import MarketTicker from '../components/MarketTicker'
 import FeaturedFarmers from '../components/FeaturedFarmers'
 
@@ -12,7 +13,8 @@ export default function Home() {
  <>
       <Head><title>AgriRoute — Fresh from farms</title></Head>
       <div style={{minHeight:'100vh', background:'#f8fafc'}}>
-
+<Header /> 
+  
         <main style={{maxWidth:1024, margin:'24px auto', padding:12}}>
         <section style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:12}}>
             <a href="/retail" style={{background:'#fff', padding:20, borderRadius:8, boxShadow:'0 1px 3px rgba(0,0,0,0.06)'}}>
