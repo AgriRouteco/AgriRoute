@@ -1,5 +1,4 @@
 import Head from 'next/head'
-import Header from '../components/Header'
 import MarketTicker from '../components/MarketTicker'
 import FeaturedFarmers from '../components/FeaturedFarmers'
 
@@ -13,36 +12,30 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>AgriRoute — Direct from farmers</title>
+        <title>AgriRoute — Fresh from farms</title>
       </Head>
 
-      <div style={{ minHeight: "100vh", background: "#f8fafc" }}>
-        
-        {/* NEW Header (ONLY ONE) */}
-        <Header />
+      {/* REMOVE the duplicate <Header /> — it's global now */}
 
-        {/* PAGE CONTENT */}
+      <div style={{ minHeight: "100vh", background: "#f8fafc" }}>
         <main style={{ maxWidth: 1024, margin: "24px auto", padding: 12 }}>
 
-          {/* Boxes for home & business */}
-          <section style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-            <a href="/retail" style={{ background:'#fff', padding:20, borderRadius:8, boxShadow:'0 1px 3px rgba(0,0,0,0.06)' }}>
+          <section style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <a href="/retail" style={{ background: "#fff", padding: 20, borderRadius: 8, boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
               <h2 style={{ fontSize: 18, fontWeight: 600 }}>For Home — Fresh produce, local</h2>
-              <p style={{ color:'#6b7280' }}>Order pick-up or delivery — apples, veg, dairy & more.</p>
+              <p style={{ color: "#6b7280" }}>Order pick-up or delivery — apples, veg, dairy & more.</p>
             </a>
 
-            <a href="/business" style={{ background:'#fff', padding:20, borderRadius:8, boxShadow:'0 1px 3px rgba(0,0,0,0.06)' }}>
+            <a href="/business" style={{ background: "#fff", padding: 20, borderRadius: 8, boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
               <h2 style={{ fontSize: 18, fontWeight: 600 }}>For Restaurants — Reliable local supply</h2>
-              <p style={{ color:'#6b7280' }}>Bulk supply, recurring deliveries and trusted farms.</p>
+              <p style={{ color: "#6b7280" }}>Bulk supply, recurring deliveries and trusted farms.</p>
             </a>
           </section>
 
-          {/* Ticker */}
           <section style={{ marginTop: 20 }}>
             <MarketTicker tickers={tickers} />
           </section>
 
-          {/* Featured farmers */}
           <section style={{ marginTop: 20 }}>
             <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 8 }}>Featured farmers</h3>
             <FeaturedFarmers />
