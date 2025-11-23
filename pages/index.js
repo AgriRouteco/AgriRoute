@@ -8,7 +8,7 @@ export default function Home() {
     { name: 'Potatoes', price: 0.70, unit: 'kg', change: -0.01 },
     { name: 'Eggs', price: 0.20, unit: 'egg', change: 0.00 },
   ]
-    
+  return (   
  <>
       <Head><title>AgriRoute — Fresh from farms</title></Head>
       <div style={{minHeight:'100vh', background:'#f8fafc'}}>
