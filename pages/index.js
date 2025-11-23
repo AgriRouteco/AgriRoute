@@ -18,13 +18,7 @@ export default function Home() {
               <a href="/" style={{ fontSize: 20, fontWeight: 700 }}>
   AgriRoute — Direct From Farmers
 </a>
-              <div style={{color:'#6b7280', fontSize:13}}>Direct from farmers</div>
-            </div>
-            <nav style={{display:'flex', gap:8}}>
-              <a href="/retail" style={{background:'#16a34a', color:'#fff', padding:'8px 12px', borderRadius:6}}>For Home</a>
-              <a href="/business" style={{border:'1px solid #e5e7eb', padding:'8px 12px', borderRadius:6}}>For Businesses</a>
-              <a href="/sell" style={{padding:'8px 12px', borderRadius:6}}>Sell</a>
-            </nav>
+             
           </div>
         </header>
 
