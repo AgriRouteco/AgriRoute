@@ -11,6 +11,25 @@ export default function Sell({ user }) {
     return <p style={{textAlign:"center", marginTop:20}}>Redirecting...</p>
   }
 
+export default function Sell({ user }) {
+  const router = useRouter()
+
+  // 1. Not logged in → redirect to login
+  if (!user) {
+    if (typeof window !== "undefined") router.push("/login")
+    return <p style={{textAlign:"center", marginTop:20}}>Redirecting...</p>
+  }
+
+  // 2. Logged in but NOT a farmer → block access
+  if (user && user.user_metadata?.role !== "farmer") {
+    return (
+      <div style={{textAlign:"center", marginTop:40}}>
+        <h2>You must be a farmer to create listings.</h2>
+        <p style={{marginTop:10}}>Please register a farmer account.</p>
+      </div>
+    )
+  }
+
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [category, setCategory] = useState("Fruit")
