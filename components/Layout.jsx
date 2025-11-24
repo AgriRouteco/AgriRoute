@@ -1,4 +1,5 @@
 import Header from "./Header"
+import Footer from "./Footer" 
 
 export default function Layout({ children, user }) {
   return (
@@ -7,6 +8,8 @@ export default function Layout({ children, user }) {
       <main style={{ paddingTop: "20px" }}>
         {children}
       </main>
+
+      <Footer />
     </>
   )
 }
