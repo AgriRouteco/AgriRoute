@@ -11,13 +11,11 @@ export default function Retail() {
   // --- BASKET STATE ---
   const [basket, setBasket] = useState([])
 
-  // Load basket from localStorage
   useEffect(() => {
     const saved = localStorage.getItem("basket")
     if (saved) setBasket(JSON.parse(saved))
   }, [])
 
-  // Save basket to localStorage on change
   useEffect(() => {
     localStorage.setItem("basket", JSON.stringify(basket))
   }, [basket])
@@ -84,10 +82,44 @@ export default function Retail() {
   // --- MAX QUANTITY FOR PROGRESS BAR ---
   const maxQty = 500
 
+  // --- TOTAL ITEMS IN BASKET ---
+  const basketCount = basket.reduce((sum, item) => sum + item.count, 0)
+
   return (
     <div style={{ minHeight: "100vh", background: "#f8fafc", padding: 24 }}>
       <div style={{ maxWidth: 1024, margin: "0 auto" }}>
-        <h1 style={{ fontSize: 22, fontWeight: 700 }}>Retail Market</h1>
+        {/* HEADER */}
+        <div style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 20
+        }}>
+          <h1 style={{ fontSize: 22, fontWeight: 700 }}>Retail Market</h1>
+
+          {/* Basket Counter */}
+          <div style={{
+            position: "relative",
+            fontWeight: 600,
+            cursor: "pointer"
+          }}>
+            🛒 Basket
+            {basketCount > 0 && (
+              <span style={{
+                position: "absolute",
+                top: -8,
+                right: -12,
+                background: "#ef4444",
+                color: "#fff",
+                borderRadius: "50%",
+                padding: "2px 6px",
+                fontSize: 12
+              }}>
+                {basketCount}
+              </span>
+            )}
+          </div>
+        </div>
 
         {/* SEARCH */}
         <input
@@ -98,7 +130,7 @@ export default function Retail() {
           style={{
             width: "100%",
             padding: "12px",
-            marginTop: "10px",
+            marginBottom: 20,
             border: "1px solid #d1d5db",
             borderRadius: "8px",
             fontSize: "16px",
@@ -110,7 +142,7 @@ export default function Retail() {
           style={{
             display: "flex",
             gap: "12px",
-            marginTop: "20px",
+            marginBottom: 16,
             flexWrap: "wrap",
           }}
         >
@@ -166,7 +198,6 @@ export default function Retail() {
         >
           {sortedListings.map((l) => {
             const percent = Math.min((l.qty / maxQty) * 100, 100)
-
             return (
               <div
                 key={l.id}
@@ -189,13 +220,7 @@ export default function Retail() {
                   }}
                 />
 
-                <h3
-                  style={{
-                    fontSize: "18px",
-                    fontWeight: 700,
-                    marginTop: "10px",
-                  }}
-                >
+                <h3 style={{ fontSize: "18px", fontWeight: 700, marginTop: "10px" }}>
                   {l.product}
                 </h3>
 
@@ -260,4 +285,5 @@ export default function Retail() {
     </div>
   )
 }
+
 
