@@ -35,7 +35,7 @@ export default function Header({ user }) {
     <img 
       src="/logo.png"   // <-- update name if your file is different
       alt="AgriRoute Logo"
-      style={{ height: "110px", width: "auto" }}
+      style={{ height: "80px", width: "auto" }}
     />
   </Link>
 </div>
