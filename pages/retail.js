@@ -6,6 +6,7 @@ export default function Retail() {
   const [search, setSearch] = useState("")
   const [category, setCategory] = useState("")
   const [delivery, setDelivery] = useState("")
+  const [sort, setSort] = useState("")
 
   const tickers = [
     { name: 'Apples', price: 1.80, unit: 'kg', change: 0.02 }
@@ -37,6 +38,22 @@ const listings = [
 const filteredListings = listings.filter((item) => {
   const matchesSearch =
     item.product.toLowerCase().includes(search.toLowerCase())
+
+  const sortedListings = [...filteredListings].sort((a, b) => {
+  if (sort === "price_low") {
+    return a.price - b.price
+  }
+  if (sort === "price_high") {
+    return b.price - a.price
+  }
+  if (sort === "distance_near") {
+    return a.seller.distanceKm - b.seller.distanceKm
+  }
+  if (sort === "distance_far") {
+    return b.seller.distanceKm - a.seller.distanceKm
+  }
+  return 0  // recommended (no sorting)
+})
 
   const matchesCategory =
     category ? item.category === category : true
@@ -97,6 +114,19 @@ const filteredListings = listings.filter((item) => {
             <option value="delivery">Delivery</option>
             <option value="both">Both</option>
           </select>
+<select
+  value={sort}
+  onChange={(e) => setSort(e.target.value)}
+  style={{ padding: "10px", borderRadius: "6px" }}
+>
+  <option value="">Recommended</option>
+  <option value="price_low">Price: Low → High</option>
+  <option value="price_high">Price: High → Low</option>
+  <option value="distance_near">Distance: Near → Far</option>
+  <option value="distance_far">Distance: Far → Near</option>
+</select>
+
+            
         </div>
 
         <MarketTicker tickers={tickers} />
@@ -107,7 +137,7 @@ const filteredListings = listings.filter((item) => {
           gap: 12,
           marginTop: 16
         }}>
-         {filteredListings.map(l => (
+        {sortedListings.map(l => (
             <div key={l.id} style={{ background: '#fff', padding: 16, borderRadius: 8 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
