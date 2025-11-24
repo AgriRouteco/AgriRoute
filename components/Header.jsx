@@ -29,17 +29,16 @@ export default function Header({ user }) {
         justifyContent: "space-between"
       }}>
 
-        {/* Logo */}
-        <div style={{ cursor: "pointer" }}>
-          <Link href="/">
-            <div style={{ fontSize: "22px", fontWeight: 700 }}>
-              AgriRoute
-            </div>
-            <div style={{ color: "#6b7280", fontSize: "13px", marginTop: "-3px" }}>
-              Direct from farmers
-            </div>
-          </Link>
-        </div>
+  {/* Logo */}
+<div style={{ cursor: "pointer" }}>
+  <Link href="/">
+    <img 
+      src="/logo.png"   // <-- update name if your file is different
+      alt="AgriRoute Logo"
+      style={{ height: "45px", width: "auto" }}
+    />
+  </Link>
+</div>
 
         {/* Navigation */}
         <nav style={{ display: "flex", gap: "16px" }}>
