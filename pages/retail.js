@@ -140,23 +140,54 @@ const sortedListings = [...filteredListings].sort((a, b) => {
           gap: 12,
           marginTop: 16
         }}>
-        {sortedListings.map(l => (
-            <div key={l.id} style={{ background: '#fff', padding: 16, borderRadius: 8 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <div>
-                  <div style={{ fontWeight: 700 }}>{l.product}</div>
-                  <div style={{ color: '#6b7280' }}>£{l.price.toFixed(2)} / {l.unit}</div>
-                  <div style={{ color: '#9ca3af', fontSize: 13 }}>Available: {l.qty} {l.unit}</div>
-                </div>
 
-                <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: 13 }}>{l.seller.farmName}</div>
-                  <div style={{ color: '#9ca3af', fontSize: 12 }}>{l.seller.distanceKm} km</div>
-                  <button style={{ marginTop: 8, padding: '6px 10px', background: '#16a34a', color: '#fff', borderRadius: 6 }}>Add</button>
-                </div>
-              </div>
-            </div>
-          ))}
+{sortedListings.map(l => (
+  <div 
+    key={l.id}
+    style={{
+      background: "white",
+      borderRadius: "10px",
+      padding: "16px",
+      boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
+      display: "flex",
+      flexDirection: "column"
+    }}
+  >
+    <img 
+      src={l.image_url || "/placeholder-produce.jpg"} 
+      style={{
+        width: "100%",
+        height: "160px",
+        objectFit: "cover",
+        borderRadius: "8px"
+      }} 
+    />
+
+    <h3 style={{ fontSize: "18px", fontWeight: 700, marginTop: "10px" }}>
+      {l.product}
+    </h3>
+
+    <p style={{ color: "#6b7280", fontSize: "14px", marginTop: "4px" }}>
+      £{l.price} per {l.unit}
+    </p>
+
+    <p style={{ color: "#374151", fontSize: "14px", marginTop: "8px" }}>
+      {l.seller.farmName}
+    </p>
+
+    <button style={{
+      marginTop: "12px",
+      background: "#16a34a",
+      color: "white",
+      padding: "10px",
+      borderRadius: "6px",
+      fontWeight: 600
+    }}>
+      View
+    </button>
+  </div>
+))}
+  
         </div>
 
       </div>
