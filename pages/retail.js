@@ -11,11 +11,42 @@ export default function Retail() {
     { name: 'Apples', price: 1.80, unit: 'kg', change: 0.02 }
   ]
 
-  const listings = [
-    { id: 1, product: 'Apples', price: 1.80, unit: 'kg', seller: { farmName: 'Green Vale', distanceKm: 6 }, qty: 120 },
-    { id: 2, product: 'Potatoes', price: 0.70, unit: 'kg', seller: { farmName: 'Hillside Farm', distanceKm: 12 }, qty: 500 },
-  ]
+const listings = [
+  { 
+    id: 1,
+    product: 'Apples',
+    category: 'Fruit',       // <-- NEW
+    delivery: 'both',        // <-- NEW
+    price: 1.80,
+    unit: 'kg',
+    seller: { farmName: 'Green Vale', distanceKm: 6 },
+    qty: 120
+  },
+  { 
+    id: 2,
+    product: 'Potatoes',
+    category: 'Vegetables',  // <-- NEW
+    delivery: 'collection',  // <-- NEW
+    price: 0.70,
+    unit: 'kg',
+    seller: { farmName: 'Hillside Farm', distanceKm: 12 },
+    qty: 500
+  }
+]
 
+const filteredListings = listings.filter((item) => {
+  const matchesSearch =
+    item.product.toLowerCase().includes(search.toLowerCase())
+
+  const matchesCategory =
+    category ? item.category === category : true
+
+  const matchesDelivery =
+    delivery ? item.delivery === delivery : true
+
+  return matchesSearch && matchesCategory && matchesDelivery
+})
+  
   return (
     <div style={{ minHeight: '100vh', background: '#f8fafc', padding: 24 }}>
       <div style={{ maxWidth: 1024, margin: '0 auto' }}>
@@ -76,7 +107,7 @@ export default function Retail() {
           gap: 12,
           marginTop: 16
         }}>
-          {listings.map(l => (
+         {filteredListings.map(l => (
             <div key={l.id} style={{ background: '#fff', padding: 16, borderRadius: 8 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
