@@ -11,6 +11,51 @@ export default function Retail() {
     <div style={{minHeight:'100vh', background:'#f8fafc', padding:24}}>
       <div style={{maxWidth:1024, margin:'0 auto'}}>
         <h1 style={{fontSize:22, fontWeight:700}}>Retail Market</h1>
+  <input
+  type="text"
+  placeholder="Search produce (e.g. apples, milk, tomatoes)…"
+  value={search}
+  onChange={(e) => setSearch(e.target.value)}
+  style={{
+    width: "100%",
+    padding: "12px",
+    marginTop: "10px",
+    border: "1px solid #d1d5db",
+    borderRadius: "8px",
+    fontSize: "16px"
+  }}
+/>
+  <div style={{
+  display: "flex",
+  gap: "12px",
+  marginTop: "20px",
+  flexWrap: "wrap"
+}}>
+  <select
+    value={category}
+    onChange={(e) => setCategory(e.target.value)}
+    style={{ padding: "10px", borderRadius: "6px" }}
+  >
+    <option value="">All Categories</option>
+    <option value="Fruit">Fruit</option>
+    <option value="Vegetables">Vegetables</option>
+    <option value="Dairy">Dairy</option>
+    <option value="Meat">Meat</option>
+    <option value="Grains">Grains</option>
+    <option value="Other">Other</option>
+  </select>
+
+  <select
+    value={delivery}
+    onChange={(e) => setDelivery(e.target.value)}
+    style={{ padding: "10px", borderRadius: "6px" }}
+  >
+    <option value="">All Delivery</option>
+    <option value="collection">Collection</option>
+    <option value="delivery">Delivery</option>
+    <option value="both">Both</option>
+  </select>
+</div>
         <MarketTicker tickers={tickers} />
         <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(320px,1fr))', gap:12, marginTop:16}}>
           {listings.map(l => (
