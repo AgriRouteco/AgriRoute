@@ -4,14 +4,32 @@ import { supabase } from '../lib/supabaseClient'
 import { useEffect, useState } from 'react'
 
 export default function MyApp({ Component, pageProps }) {
+
   const [user, setUser] = useState(null)
 
+  supabase.auth.getUser().then(async (res) => {
+  const authUser = res.data.user
+  setUser(authUser)
+
+  if (authUser) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', authUser.id)
+      .single()
+
+    setUser({ ...authUser, profile })
+  }
+})
+
   useEffect(() => {
-    const session = supabase.auth.getUser().then(res => {
+    // Load the currently logged-in user
+    supabase.auth.getUser().then(res => {
       setUser(res.data.user)
     })
 
-    supabase.auth.onAuthStateChange((event, session) => {
+    // Listen for login/logout changes
+    supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user || null)
     })
   }, [])
