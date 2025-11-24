@@ -35,34 +35,6 @@ const listings = [
   }
 ]
 
-const filteredListings = listings.filter((item) => {
-  const matchesSearch =
-    item.product.toLowerCase().includes(search.toLowerCase())
-
-  const sortedListings = [...filteredListings].sort((a, b) => {
-  if (sort === "price_low") {
-    return a.price - b.price
-  }
-  if (sort === "price_high") {
-    return b.price - a.price
-  }
-  if (sort === "distance_near") {
-    return a.seller.distanceKm - b.seller.distanceKm
-  }
-  if (sort === "distance_far") {
-    return b.seller.distanceKm - a.seller.distanceKm
-  }
-  return 0  // recommended (no sorting)
-})
-
-  const matchesCategory =
-    category ? item.category === category : true
-
-  const matchesDelivery =
-    delivery ? item.delivery === delivery : true
-
-  return matchesSearch && matchesCategory && matchesDelivery
-})
   // 1. FILTER FIRST
 const filteredListings = listings.filter((item) => {
   const matchesSearch =
@@ -91,8 +63,9 @@ const sortedListings = [...filteredListings].sort((a, b) => {
   if (sort === "distance_far") {
     return b.seller.distanceKm - a.seller.distanceKm
   }
-  return 0 // recommended (no sorting)
+  return 0 // “Recommended”: no sort
 })
+
 
   return (
     <div style={{ minHeight: '100vh', background: '#f8fafc', padding: 24 }}>
