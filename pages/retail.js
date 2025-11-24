@@ -10,6 +10,7 @@ export default function Retail() {
 
   // --- BASKET STATE ---
   const [basket, setBasket] = useState([])
+  const [showBasket, setShowBasket] = useState(false)
 
   useEffect(() => {
     const saved = localStorage.getItem("basket")
@@ -32,10 +33,19 @@ export default function Retail() {
     })
   }
 
+  const removeFromBasket = (id) => {
+    setBasket((prev) => prev.filter((i) => i.id !== id))
+  }
+
+  const updateCount = (id, count) => {
+    if (count < 1) return
+    setBasket((prev) =>
+      prev.map((i) => (i.id === id ? { ...i, count } : i))
+    )
+  }
+
   // --- DATA ---
-  const tickers = [
-    { name: "Apples", price: 1.8, unit: "kg", change: 0.02 },
-  ]
+  const tickers = [{ name: "Apples", price: 1.8, unit: "kg", change: 0.02 }]
 
   const listings = [
     {
@@ -47,7 +57,7 @@ export default function Retail() {
       unit: "kg",
       seller: { farmName: "Green Vale", distanceKm: 6 },
       qty: 120,
-      image_url: "", // optional
+      image_url: "",
     },
     {
       id: 2,
@@ -58,11 +68,11 @@ export default function Retail() {
       unit: "kg",
       seller: { farmName: "Hillside Farm", distanceKm: 12 },
       qty: 500,
-      image_url: "", // optional
+      image_url: "",
     },
   ]
 
-  // --- FILTER LISTINGS ---
+  // --- FILTER + SORT LISTINGS ---
   const filteredListings = listings.filter((item) => {
     const matchesSearch = item.product.toLowerCase().includes(search.toLowerCase())
     const matchesCategory = category ? item.category === category : true
@@ -70,7 +80,6 @@ export default function Retail() {
     return matchesSearch && matchesCategory && matchesDelivery
   })
 
-  // --- SORT LISTINGS ---
   const sortedListings = [...filteredListings].sort((a, b) => {
     if (sort === "price_low") return a.price - b.price
     if (sort === "price_high") return b.price - a.price
@@ -79,49 +88,127 @@ export default function Retail() {
     return 0
   })
 
-  // --- MAX QUANTITY FOR PROGRESS BAR ---
   const maxQty = 500
-
-  // --- TOTAL ITEMS IN BASKET ---
   const basketCount = basket.reduce((sum, item) => sum + item.count, 0)
+  const basketTotal = basket.reduce((sum, item) => sum + item.price * item.count, 0)
 
   return (
     <div style={{ minHeight: "100vh", background: "#f8fafc", padding: 24 }}>
       <div style={{ maxWidth: 1024, margin: "0 auto" }}>
         {/* HEADER */}
-        <div style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: 20
-        }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: 20,
+            position: "relative",
+          }}
+        >
           <h1 style={{ fontSize: 22, fontWeight: 700 }}>Retail Market</h1>
 
-          {/* Basket Counter */}
-          <div style={{
-            position: "relative",
-            fontWeight: 600,
-            cursor: "pointer"
-          }}>
+          {/* Basket Icon */}
+          <div
+            style={{
+              position: "relative",
+              fontWeight: 600,
+              cursor: "pointer",
+            }}
+            onClick={() => setShowBasket(!showBasket)}
+          >
             🛒 Basket
             {basketCount > 0 && (
-              <span style={{
-                position: "absolute",
-                top: -8,
-                right: -12,
-                background: "#ef4444",
-                color: "#fff",
-                borderRadius: "50%",
-                padding: "2px 6px",
-                fontSize: 12
-              }}>
+              <span
+                style={{
+                  position: "absolute",
+                  top: -8,
+                  right: -12,
+                  background: "#ef4444",
+                  color: "#fff",
+                  borderRadius: "50%",
+                  padding: "2px 6px",
+                  fontSize: 12,
+                }}
+              >
                 {basketCount}
               </span>
             )}
           </div>
+
+          {/* Mini Basket Overlay */}
+          {showBasket && (
+            <div
+              style={{
+                position: "absolute",
+                top: 40,
+                right: 0,
+                width: 300,
+                background: "white",
+                borderRadius: "8px",
+                boxShadow: "0 2px 12px rgba(0,0,0,0.15)",
+                padding: 16,
+                zIndex: 100,
+              }}
+            >
+              <h3 style={{ marginBottom: 12 }}>Your Basket</h3>
+              {basket.length === 0 ? (
+                <p style={{ color: "#6b7280" }}>Basket is empty</p>
+              ) : (
+                <>
+                  {basket.map((item) => (
+                    <div
+                      key={item.id}
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginBottom: 8,
+                      }}
+                    >
+                      <div>
+                        <div style={{ fontWeight: 600 }}>{item.product}</div>
+                        <div style={{ fontSize: 12, color: "#6b7280" }}>
+                          £{item.price.toFixed(2)} ×{" "}
+                          <input
+                            type="number"
+                            min="1"
+                            value={item.count}
+                            onChange={(e) => updateCount(item.id, parseInt(e.target.value))}
+                            style={{
+                              width: 40,
+                              fontSize: 12,
+                              marginLeft: 4,
+                              textAlign: "center",
+                            }}
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <button
+                          onClick={() => removeFromBasket(item.id)}
+                          style={{
+                            background: "transparent",
+                            border: "none",
+                            color: "#ef4444",
+                            cursor: "pointer",
+                            fontWeight: 600,
+                          }}
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                  <div style={{ borderTop: "1px solid #e5e7eb", marginTop: 8, paddingTop: 8 }}>
+                    <strong>Total: £{basketTotal.toFixed(2)}</strong>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
         </div>
 
-        {/* SEARCH */}
+        {/* SEARCH + FILTERS */}
         <input
           type="text"
           placeholder="Search produce (e.g. apples, milk, tomatoes)…"
@@ -137,7 +224,6 @@ export default function Retail() {
           }}
         />
 
-        {/* FILTERS + SORT */}
         <div
           style={{
             display: "flex",
@@ -232,7 +318,6 @@ export default function Retail() {
                   {l.seller.farmName} — {l.seller.distanceKm} km
                 </p>
 
-                {/* Quantity Progress Bar */}
                 <div style={{ marginTop: "10px" }}>
                   <div
                     style={{
@@ -261,7 +346,6 @@ export default function Retail() {
                   </p>
                 </div>
 
-                {/* Add to Basket */}
                 <button
                   onClick={() => addToBasket(l)}
                   style={{
@@ -285,5 +369,6 @@ export default function Retail() {
     </div>
   )
 }
+
 
 
