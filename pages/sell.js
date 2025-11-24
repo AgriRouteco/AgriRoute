@@ -11,8 +11,6 @@ export default function Sell({ user }) {
     return <p style={{textAlign:"center", marginTop:20}}>Redirecting...</p>
   }
 
-export default function Sell({ user }) {
-  const router = useRouter()
 
   // 1. Not logged in → redirect to login
   if (!user) {
@@ -29,6 +27,7 @@ export default function Sell({ user }) {
       </div>
     )
   }
+
 
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
