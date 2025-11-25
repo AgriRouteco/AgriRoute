@@ -1,134 +1,140 @@
-import Head from 'next/head'
-import MarketTicker from '../components/MarketTicker'
-import FeaturedFarmers from '../components/FeaturedFarmers'
+import Head from "next/head"
+import Link from "next/link"
+import { useState } from "react"
 
 export default function Home() {
-  const tickers = [
-    { name: 'Apples', price: 1.80, unit: 'kg', change: 0.02 },
-    { name: 'Potatoes', price: 0.70, unit: 'kg', change: -0.01 },
-    { name: 'Eggs', price: 0.20, unit: 'egg', change: 0.00 },
+  const [search, setSearch] = useState("")
+  const [category, setCategory] = useState("all")
+
+  const categories = [
+    { id: "all", name: "All Produce" },
+    { id: "fruit", name: "Fruit" },
+    { id: "veg", name: "Vegetables" },
+    { id: "dairy", name: "Dairy" },
+    { id: "meat", name: "Meat" },
+    { id: "grains", name: "Grains" },
   ]
 
   return (
     <>
       <Head>
-        <title>AgriRoute — Fresh from farms</title>
+        <title>AgriRoute — Fresh, Fair, Local</title>
       </Head>
 
-      {/* REMOVE the duplicate <Header /> — it's global now */}
+      <div style={{ background: "#f4f8f3", minHeight: "100vh" }}>
+        
+        {/* Hero Section */}
+        <section style={{
+          padding: "60px 20px",
+          textAlign: "center",
+          background: "linear-gradient(135deg, #2f855a, #16a34a)",
+          color: "white"
+        }}>
+          <h1 style={{ fontSize: 40, fontWeight: 800 }}>
+            Fresh Food. Fair Prices. Local Farmers.
+          </h1>
+          <p style={{ marginTop: 12, fontSize: 18, opacity: 0.9 }}>
+            A marketplace that connects communities with real farms.
+          </p>
 
-      <div style={{ minHeight: "100vh", background: "#f8fafc" }}>
-       <main style={{ maxWidth: "1200px", margin: "0 auto", padding: "40px 20px" }}>
+          {/* SEARCH BAR */}
+          <div style={{ marginTop: 30, maxWidth: 500, marginLeft: "auto", marginRight: "auto" }}>
+            <input
+              type="text"
+              placeholder="Search for produce…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              style={{
+                width: "100%",
+                padding: 16,
+                borderRadius: 8,
+                border: "none",
+                outline: "none",
+                fontSize: 16
+              }}
+            />
+          </div>
+        </section>
 
-  {/* Hero Section */}
-  <section style={{
-    background: "#e8f5e9",
-    padding: "60px 40px",
-    borderRadius: "12px",
-    textAlign: "center",
-    marginBottom: "40px"
-  }}>
-    <h1 style={{ fontSize: "40px", fontWeight: 800, marginBottom: 10 }}>
-      Fresh Food, Direct From Farmers
-    </h1>
-    <p style={{ color: "#4b5563", fontSize: "18px", maxWidth: "700px", margin: "0 auto" }}>
-      Skip the supermarkets — buy straight from real farmers. Better prices for them, fresher food for you.
-    </p>
+        {/* Category Filters */}
+        <div style={{
+          display: "flex",
+          gap: 10,
+          justifyContent: "center",
+          marginTop: 20,
+          flexWrap: "wrap",
+          padding: "0 20px"
+        }}>
+          {categories.map(cat => (
+            <button
+              key={cat.id}
+              onClick={() => setCategory(cat.id)}
+              style={{
+                padding: "10px 16px",
+                borderRadius: 20,
+                border: category === cat.id ? "2px solid #15803d" : "1px solid #d1d5db",
+                background: category === cat.id ? "#dcfce7" : "white",
+                fontWeight: 600,
+                cursor: "pointer"
+              }}
+            >
+              {cat.name}
+            </button>
+          ))}
+        </div>
 
-    <div style={{ marginTop: "30px", display: "flex", justifyContent: "center", gap: "20px" }}>
-      <a href="/retail" style={{
-        background: "#16a34a",
-        color: "white",
-        padding: "14px 24px",
-        borderRadius: 8,
-        fontSize: 18,
-        fontWeight: 600
-      }}>
-        Shop Produce
-      </a>
+        {/* Placeholder Product Grid */}
+        <main style={{
+          maxWidth: 1100,
+          margin: "40px auto",
+          padding: "0 20px"
+        }}>
+          <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 20 }}>
+            Popular Produce
+          </h2>
 
-      <a href="/business" style={{
-        background: "white",
-        border: "2px solid #16a34a",
-        color: "#16a34a",
-        padding: "14px 24px",
-        borderRadius: 8,
-        fontSize: 18,
-        fontWeight: 600
-      }}>
-        For Restaurants
-      </a>
-    </div>
-  </section>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+            gap: 20
+          }}>
+            {/* Example placeholder items */}
+            {[1,2,3,4,5,6].map((i) => (
+              <div key={i} style={{
+                background: "white",
+                padding: 20,
+                borderRadius: 10,
+                boxShadow: "0 1px 3px rgba(0,0,0,0.1)"
+              }}>
+                <div style={{
+                  background: "#e5e7eb",
+                  height: 120,
+                  borderRadius: 8
+                }} />
 
-  {/* Ticker + Featured */}
-  <section style={{ marginBottom: "40px" }}>
-    <MarketTicker tickers={tickers} />
-  </section>
+                <h3 style={{ marginTop: 12, fontWeight: 600 }}>Product {i}</h3>
+                <p style={{ color: "#6b7280", fontSize: 14 }}>Local • Fresh</p>
 
-  <section>
-    <h2 style={{ fontSize: "26px", fontWeight: "700", marginBottom: "20px" }}>
-      Featured Farmers
-    </h2>
-    <FeaturedFarmers />
-  </section>
-
-</main>
+                <Link href={`/product/${i}`}>
+                  <button style={{
+                    width: "100%",
+                    marginTop: 12,
+                    padding: "10px 0",
+                    background: "#16a34a",
+                    color: "white",
+                    borderRadius: 6,
+                    fontWeight: 600,
+                    cursor: "pointer"
+                  }}>
+                    View
+                  </button>
+                </Link>
+              </div>
+            ))}
+          </div>
+        </main>
       </div>
     </>
-  )
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-Signup.js : 
-export default function Signup() {
-  return (
-    <div style={{maxWidth: 400, margin: "50px auto", textAlign: "center"}}>
-      <h1 style={{fontSize: 24, fontWeight: 600}}>Create an Account</h1>
-      
-      <p style={{marginTop: 10}}>Choose who you are signing up as</p>
-
-      <a 
-        href="/signup-customer"
-        style={{
-          display: "block",
-          background: "#16a34a",
-          color: "white",
-          padding: 15,
-          borderRadius: 6,
-          marginTop: 25,
-          textDecoration: "none"
-        }}
-      >
-        I’m a Customer
-      </a>
-
-      <a 
-        href="/signup-farmer"
-        style={{
-          display: "block",
-          background: "#2563eb",
-          color: "white",
-          padding: 15,
-          borderRadius: 6,
-          marginTop: 20,
-          textDecoration: "none"
-        }}
-      >
-        I’m a Farmer
-      </a>
-    </div>
   )
 }
 
