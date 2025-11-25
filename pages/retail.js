@@ -3,71 +3,62 @@ import { supabase } from "../lib/supabaseClient"
 
 export default function Retail() {
   const [products, setProducts] = useState([])
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    async function loadProducts() {
-      const { data, error } = await supabase
-        .from("products")
-        .select("*")
-        .eq("is_active", true)
-
-      if (error) console.error(error)
+    async function load() {
+      // Get aggregated product catalog
+      const { data } = await supabase.from("products").select("*")
       setProducts(data || [])
-      setLoading(false)
     }
-
-    loadProducts()
+    load()
   }, [])
 
-  if (loading) return <p style={{ textAlign: "center", marginTop: 20 }}>Loading...</p>
-
   return (
-    <div style={{ maxWidth: "1100px", margin: "30px auto", padding: "20px" }}>
-      <h1 style={{ fontSize: 26, fontWeight: 700 }}>Fresh Produce</h1>
+    <div style={{ maxWidth:900, margin:"40px auto", padding:20 }}>
+      <h1 style={{ fontSize:26, fontWeight:700 }}>Fresh Produce</h1>
 
       <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-        gap: 20,
-        marginTop: 20
+        display:"grid",
+        gridTemplateColumns:"repeat(auto-fill, minmax(250px, 1fr))",
+        gap:20,
+        marginTop:20
       }}>
         {products.map(p => (
-          <div key={p.id} style={{
-            background: "#fff",
-            borderRadius: 10,
-            boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
-            padding: 16
-          }}>
-            <img 
-              src={p.main_image_url} 
-              style={{ width: "100%", height: 150, objectFit: "cover", borderRadius: 8 }}
+          <div key={p.id}
+            style={{
+              background:"#fff",
+              padding:16,
+              borderRadius:8,
+              boxShadow:"0 1px 3px rgba(0,0,0,0.1)"
+            }}
+          >
+            <img
+              src={p.image_url}
+              style={{ width:"100%", height:160, objectFit:"cover", borderRadius:6 }}
             />
 
-            <h3 style={{ fontSize: 18, fontWeight: 600, marginTop: 10 }}>{p.name}</h3>
+            <h2 style={{ fontSize:18, marginTop:10 }}>{p.name}</h2>
+            <p style={{ color:"#6b7280", fontSize:14 }}>
+              Recommended: £{p.recommended_price}
+            </p>
 
-            <p style={{ color: "#6b7280", marginTop: 5 }}>{p.description}</p>
-
-            <p style={{ marginTop: 10, fontWeight: 600 }}>£{p.price_min.toFixed(2)} – £{p.price_max.toFixed(2)}</p>
-
-            <button 
+            <a
+              href={`/product/${p.id}`}
               style={{
-                width: "100%",
-                padding: 12,
-                marginTop: 10,
-                background: "#16a34a",
-                color: "white",
-                borderRadius: 6,
-                fontWeight: 600
+                display:"block",
+                marginTop:10,
+                padding:"10px 12px",
+                background:"#16a34a",
+                color:"#fff",
+                textAlign:"center",
+                borderRadius:6
               }}
             >
               View Product
-            </button>
+            </a>
           </div>
         ))}
       </div>
     </div>
   )
 }
-
-
