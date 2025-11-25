@@ -12,7 +12,6 @@ export default function SignupCustomer() {
     e.preventDefault();
     setLoading(true);
 
-    // 1. Create auth user
     const { data: auth, error: authError } = await supabase.auth.signUp({
       email,
       password
@@ -26,7 +25,6 @@ export default function SignupCustomer() {
 
     const user = auth.user;
 
-    // 2. Insert customer profile
     await supabase.from("profiles").insert([
       {
         id: user.id,
@@ -38,24 +36,77 @@ export default function SignupCustomer() {
 
     alert("Account created!");
     router.push("/login");
-    setLoading(false);
   }
 
   return (
-    <div style={{maxWidth:400, margin:"40px auto"}}>
-      <h1 style={{fontSize:24, fontWeight:700}}>Customer Signup</h1>
+    <div style={{
+      minHeight: "100vh",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      background: "#f4f5f7"
+    }}>
+      <div style={{
+        width: "100%",
+        maxWidth: 420,
+        background: "white",
+        padding: "32px",
+        borderRadius: "12px",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.08)"
+      }}>
+        
+        <h1 style={{ fontSize: 28, fontWeight: 700, textAlign: "center" }}>
+          Customer Signup
+        </h1>
+        <p style={{ color: "#666", textAlign: "center", marginTop: 6 }}>
+          Join the marketplace as a customer.
+        </p>
 
-      <form onSubmit={handleSignup}>
-        <label>Email</label>
-        <input type="email" required value={email} onChange={e=>setEmail(e.target.value)} />
+        <form onSubmit={handleSignup} style={{ marginTop: 24 }}>
+          <label>Email</label>
+          <input
+            type="email"
+            required
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            style={inputStyle}
+          />
 
-        <label>Password</label>
-        <input type="password" required value={password} onChange={e=>setPassword(e.target.value)} />
+          <label>Password</label>
+          <input
+            type="password"
+            required
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            style={inputStyle}
+          />
 
-        <button style={{marginTop:10}} disabled={loading}>
-          {loading ? "Creating..." : "Create Account"}
-        </button>
-      </form>
+          <button disabled={loading} style={buttonStyle}>
+            {loading ? "Creating…" : "Create Account"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
+
+const inputStyle = {
+  width: "100%",
+  padding: "12px",
+  marginTop: 6,
+  marginBottom: 16,
+  borderRadius: "8px",
+  border: "1px solid #d1d5db"
+};
+
+const buttonStyle = {
+  width: "100%",
+  padding: "14px",
+  background: "#2563eb",
+  color: "white",
+  borderRadius: "8px",
+  fontWeight: 600,
+  cursor: "pointer",
+  marginTop: 10
+};
+
