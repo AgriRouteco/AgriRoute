@@ -60,29 +60,35 @@ export default function Header({ user }) {
           {user ? (
             <Link href="/account">
               <button style={{
-                background: "#16a34a",
-                color: "white",
-                padding: "8px 12px",
-                borderRadius: "6px",
-                fontWeight: 600
+               padding: "10px 18px",
+      borderRadius: "8px",
+      background: "white",
+      border: "2px solid #15803d",
+      color: "#15803d",
+      fontWeight: 700,
+      transition: "0.2s",
               }}>
                 Account
               </button>
             </Link>
           ) : (
-            <Link href="/login">
-              <button
-                style={{
-                  border: "1px solid #16a34a",
-                  color: "#16a34a",
-                  padding: "8px 12px",
-                  borderRadius: "6px",
-                  fontWeight: 600
-                }}
-              >
-                Login / Signup
-              </button>
-            </Link>
+           <div style={{ display: "flex", gap: "10px" }}>
+  
+  <Link href="/login">
+    <button style={{
+      padding: "10px 18px",
+      borderRadius: "8px",
+      background: "white",
+      border: "2px solid #15803d",
+      color: "#15803d",
+      fontWeight: 700,
+      transition: "0.2s",
+    }}>
+      Login / Signup
+    </button>
+  </Link>
+
+</div>
           )}
         </div>
 
