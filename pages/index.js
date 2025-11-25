@@ -1,137 +1,134 @@
-import { useState } from "react"
-import { supabase } from "../lib/supabaseClient"
-import { useRouter } from "next/router"
+import Head from 'next/head'
+import MarketTicker from '../components/MarketTicker'
+import FeaturedFarmers from '../components/FeaturedFarmers'
 
-export default function Login() {
-const router = useRouter()
+export default function Home() {
+  const tickers = [
+    { name: 'Apples', price: 1.80, unit: 'kg', change: 0.02 },
+    { name: 'Potatoes', price: 0.70, unit: 'kg', change: -0.01 },
+    { name: 'Eggs', price: 0.20, unit: 'egg', change: 0.00 },
+  ]
 
-const [email, setEmail] = useState("")
-const [password, setPassword] = useState("")
-const [loading, setLoading] = useState(false)
-const [errorMsg, setErrorMsg] = useState("")
+  return (
+    <>
+      <Head>
+        <title>AgriRoute — Fresh from farms</title>
+      </Head>
 
-async function handleLogin(e) {
-e.preventDefault()
-setLoading(true)
-setErrorMsg("")
+      {/* REMOVE the duplicate <Header /> — it's global now */}
 
-const { error } = await supabase.auth.signInWithPassword({
-email,
-password,
-})
+      <div style={{ minHeight: "100vh", background: "#f8fafc" }}>
+       <main style={{ maxWidth: "1200px", margin: "0 auto", padding: "40px 20px" }}>
 
-if (error) {
-setErrorMsg(error.message)
-setLoading(false)
-return
+  {/* Hero Section */}
+  <section style={{
+    background: "#e8f5e9",
+    padding: "60px 40px",
+    borderRadius: "12px",
+    textAlign: "center",
+    marginBottom: "40px"
+  }}>
+    <h1 style={{ fontSize: "40px", fontWeight: 800, marginBottom: 10 }}>
+      Fresh Food, Direct From Farmers
+    </h1>
+    <p style={{ color: "#4b5563", fontSize: "18px", maxWidth: "700px", margin: "0 auto" }}>
+      Skip the supermarkets — buy straight from real farmers. Better prices for them, fresher food for you.
+    </p>
+
+    <div style={{ marginTop: "30px", display: "flex", justifyContent: "center", gap: "20px" }}>
+      <a href="/retail" style={{
+        background: "#16a34a",
+        color: "white",
+        padding: "14px 24px",
+        borderRadius: 8,
+        fontSize: 18,
+        fontWeight: 600
+      }}>
+        Shop Produce
+      </a>
+
+      <a href="/business" style={{
+        background: "white",
+        border: "2px solid #16a34a",
+        color: "#16a34a",
+        padding: "14px 24px",
+        borderRadius: 8,
+        fontSize: 18,
+        fontWeight: 600
+      }}>
+        For Restaurants
+      </a>
+    </div>
+  </section>
+
+  {/* Ticker + Featured */}
+  <section style={{ marginBottom: "40px" }}>
+    <MarketTicker tickers={tickers} />
+  </section>
+
+  <section>
+    <h2 style={{ fontSize: "26px", fontWeight: "700", marginBottom: "20px" }}>
+      Featured Farmers
+    </h2>
+    <FeaturedFarmers />
+  </section>
+
+</main>
+      </div>
+    </>
+  )
 }
 
-router.push("/account")
+
+
+
+
+
+
+
+
+
+
+
+
+Signup.js : 
+export default function Signup() {
+  return (
+    <div style={{maxWidth: 400, margin: "50px auto", textAlign: "center"}}>
+      <h1 style={{fontSize: 24, fontWeight: 600}}>Create an Account</h1>
+      
+      <p style={{marginTop: 10}}>Choose who you are signing up as</p>
+
+      <a 
+        href="/signup-customer"
+        style={{
+          display: "block",
+          background: "#16a34a",
+          color: "white",
+          padding: 15,
+          borderRadius: 6,
+          marginTop: 25,
+          textDecoration: "none"
+        }}
+      >
+        I’m a Customer
+      </a>
+
+      <a 
+        href="/signup-farmer"
+        style={{
+          display: "block",
+          background: "#2563eb",
+          color: "white",
+          padding: 15,
+          borderRadius: 6,
+          marginTop: 20,
+          textDecoration: "none"
+        }}
+      >
+        I’m a Farmer
+      </a>
+    </div>
+  )
 }
 
-return (
-<div style={{
-minHeight: "100vh",
-display: "flex",
-justifyContent: "center",
-alignItems: "center",
-background: "#f7faf8"
-}}>
-<div style={{
-width: "100%",
-maxWidth: "420px",
-background: "white",
-padding: "30px",
-borderRadius: "12px",
-boxShadow: "0 4px 12px rgba(0,0,0,0.07)"
-}}>
-
-<h1 style={{ fontSize: "26px", fontWeight: 700, textAlign: "center" }}>
-Welcome Back
-</h1>
-
-<p style={{ textAlign: "center", color: "#6b7280", marginTop: 6 }}>
-Log in to continue
-</p>
-
-{errorMsg && (
-<p style={{ color: "red", marginTop: 10, textAlign: "center" }}>
-{errorMsg}
-</p>
-)}
-
-<form onSubmit={handleLogin} style={{ marginTop: 20 }}>
-<label>Email</label>
-<input
-required
-type="email"
-value={email}
-onChange={(e) => setEmail(e.target.value)}
-style={{
-width: "100%",
-padding: "12px",
-marginTop: 6,
-marginBottom: 16,
-borderRadius: "8px",
-border: "1px solid #d1d5db"
-}}
-/>
-
-<label>Password</label>
-<input
-required
-type="password"
-value={password}
-onChange={(e) => setPassword(e.target.value)}
-style={{
-width: "100%",
-padding: "12px",
-marginTop: 6,
-marginBottom: 18,
-borderRadius: "8px",
-border: "1px solid #d1d5db"
-}}
-/>
-
-<button
-type="submit"
-disabled={loading}
-style={{
-width: "100%",
-padding: "14px",
-background: "#16a34a",
-color: "white",
-borderRadius: "8px",
-fontWeight: 600,
-letterSpacing: ".3px",
-cursor: "pointer"
-}}
->
-{loading ? "Logging in…" : "Login"}
-</button>
-</form>
-
-<div style={{ textAlign: "center", marginTop: 20 }}>
-<p style={{ color: "#6b7280" }}>
-Don’t have an account?
-</p>
-
-<a
-href="/signup"
-style={{
-display: "inline-block",
-marginTop: 8,
-padding: "10px 18px",
-background: "#2563eb",
-color: "white",
-borderRadius: "8px",
-textDecoration: "none",
-fontWeight: 600
-}}
->
-Create an Account
-</a>
-</div>
-</div>
-</div>
-)
