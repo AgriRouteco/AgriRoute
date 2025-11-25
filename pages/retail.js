@@ -1,374 +1,73 @@
-import { useState, useEffect } from "react"
-import MarketTicker from "../components/MarketTicker"
+import { useEffect, useState } from "react"
+import { supabase } from "../lib/supabaseClient"
 
 export default function Retail() {
-  // --- FILTER + SORT STATE ---
-  const [search, setSearch] = useState("")
-  const [category, setCategory] = useState("")
-  const [delivery, setDelivery] = useState("")
-  const [sort, setSort] = useState("")
-
-  // --- BASKET STATE ---
-  const [basket, setBasket] = useState([])
-  const [showBasket, setShowBasket] = useState(false)
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const saved = localStorage.getItem("basket")
-    if (saved) setBasket(JSON.parse(saved))
+    async function loadProducts() {
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .eq("is_active", true)
+
+      if (error) console.error(error)
+      setProducts(data || [])
+      setLoading(false)
+    }
+
+    loadProducts()
   }, [])
 
-  useEffect(() => {
-    localStorage.setItem("basket", JSON.stringify(basket))
-  }, [basket])
-
-  const addToBasket = (item) => {
-    setBasket((prev) => {
-      const exists = prev.find((i) => i.id === item.id)
-      if (exists) {
-        return prev.map((i) =>
-          i.id === item.id ? { ...i, count: i.count + 1 } : i
-        )
-      }
-      return [...prev, { ...item, count: 1 }]
-    })
-  }
-
-  const removeFromBasket = (id) => {
-    setBasket((prev) => prev.filter((i) => i.id !== id))
-  }
-
-  const updateCount = (id, count) => {
-    if (count < 1) return
-    setBasket((prev) =>
-      prev.map((i) => (i.id === id ? { ...i, count } : i))
-    )
-  }
-
-  // --- DATA ---
-  const tickers = [{ name: "Apples", price: 1.8, unit: "kg", change: 0.02 }]
-
-  const listings = [
-    {
-      id: 1,
-      product: "Apples",
-      category: "Fruit",
-      delivery: "both",
-      price: 1.8,
-      unit: "kg",
-      seller: { farmName: "Green Vale", distanceKm: 6 },
-      qty: 120,
-      image_url: "",
-    },
-    {
-      id: 2,
-      product: "Potatoes",
-      category: "Vegetables",
-      delivery: "collection",
-      price: 0.7,
-      unit: "kg",
-      seller: { farmName: "Hillside Farm", distanceKm: 12 },
-      qty: 500,
-      image_url: "",
-    },
-  ]
-
-  // --- FILTER + SORT LISTINGS ---
-  const filteredListings = listings.filter((item) => {
-    const matchesSearch = item.product.toLowerCase().includes(search.toLowerCase())
-    const matchesCategory = category ? item.category === category : true
-    const matchesDelivery = delivery ? item.delivery === delivery : true
-    return matchesSearch && matchesCategory && matchesDelivery
-  })
-
-  const sortedListings = [...filteredListings].sort((a, b) => {
-    if (sort === "price_low") return a.price - b.price
-    if (sort === "price_high") return b.price - a.price
-    if (sort === "distance_near") return a.seller.distanceKm - b.seller.distanceKm
-    if (sort === "distance_far") return b.seller.distanceKm - a.seller.distanceKm
-    return 0
-  })
-
-  const maxQty = 500
-  const basketCount = basket.reduce((sum, item) => sum + item.count, 0)
-  const basketTotal = basket.reduce((sum, item) => sum + item.price * item.count, 0)
+  if (loading) return <p style={{ textAlign: "center", marginTop: 20 }}>Loading...</p>
 
   return (
-    <div style={{ minHeight: "100vh", background: "#f8fafc", padding: 24 }}>
-      <div style={{ maxWidth: 1024, margin: "0 auto" }}>
-        {/* HEADER */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: 20,
-            position: "relative",
-          }}
-        >
-          <h1 style={{ fontSize: 22, fontWeight: 700 }}>Retail Market</h1>
+    <div style={{ maxWidth: "1100px", margin: "30px auto", padding: "20px" }}>
+      <h1 style={{ fontSize: 26, fontWeight: 700 }}>Fresh Produce</h1>
 
-          {/* Basket Icon */}
-          <div
-            style={{
-              position: "relative",
-              fontWeight: 600,
-              cursor: "pointer",
-            }}
-            onClick={() => setShowBasket(!showBasket)}
-          >
-            🛒 Basket
-            {basketCount > 0 && (
-              <span
-                style={{
-                  position: "absolute",
-                  top: -8,
-                  right: -12,
-                  background: "#ef4444",
-                  color: "#fff",
-                  borderRadius: "50%",
-                  padding: "2px 6px",
-                  fontSize: 12,
-                }}
-              >
-                {basketCount}
-              </span>
-            )}
-          </div>
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+        gap: 20,
+        marginTop: 20
+      }}>
+        {products.map(p => (
+          <div key={p.id} style={{
+            background: "#fff",
+            borderRadius: 10,
+            boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
+            padding: 16
+          }}>
+            <img 
+              src={p.main_image_url} 
+              style={{ width: "100%", height: 150, objectFit: "cover", borderRadius: 8 }}
+            />
 
-          {/* Mini Basket Overlay */}
-          {showBasket && (
-            <div
+            <h3 style={{ fontSize: 18, fontWeight: 600, marginTop: 10 }}>{p.name}</h3>
+
+            <p style={{ color: "#6b7280", marginTop: 5 }}>{p.description}</p>
+
+            <p style={{ marginTop: 10, fontWeight: 600 }}>£{p.price_min.toFixed(2)} – £{p.price_max.toFixed(2)}</p>
+
+            <button 
               style={{
-                position: "absolute",
-                top: 40,
-                right: 0,
-                width: 300,
-                background: "white",
-                borderRadius: "8px",
-                boxShadow: "0 2px 12px rgba(0,0,0,0.15)",
-                padding: 16,
-                zIndex: 100,
+                width: "100%",
+                padding: 12,
+                marginTop: 10,
+                background: "#16a34a",
+                color: "white",
+                borderRadius: 6,
+                fontWeight: 600
               }}
             >
-              <h3 style={{ marginBottom: 12 }}>Your Basket</h3>
-              {basket.length === 0 ? (
-                <p style={{ color: "#6b7280" }}>Basket is empty</p>
-              ) : (
-                <>
-                  {basket.map((item) => (
-                    <div
-                      key={item.id}
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        marginBottom: 8,
-                      }}
-                    >
-                      <div>
-                        <div style={{ fontWeight: 600 }}>{item.product}</div>
-                        <div style={{ fontSize: 12, color: "#6b7280" }}>
-                          £{item.price.toFixed(2)} ×{" "}
-                          <input
-                            type="number"
-                            min="1"
-                            value={item.count}
-                            onChange={(e) => updateCount(item.id, parseInt(e.target.value))}
-                            style={{
-                              width: 40,
-                              fontSize: 12,
-                              marginLeft: 4,
-                              textAlign: "center",
-                            }}
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <button
-                          onClick={() => removeFromBasket(item.id)}
-                          style={{
-                            background: "transparent",
-                            border: "none",
-                            color: "#ef4444",
-                            cursor: "pointer",
-                            fontWeight: 600,
-                          }}
-                        >
-                          ✕
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                  <div style={{ borderTop: "1px solid #e5e7eb", marginTop: 8, paddingTop: 8 }}>
-                    <strong>Total: £{basketTotal.toFixed(2)}</strong>
-                  </div>
-                </>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* SEARCH + FILTERS */}
-        <input
-          type="text"
-          placeholder="Search produce (e.g. apples, milk, tomatoes)…"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          style={{
-            width: "100%",
-            padding: "12px",
-            marginBottom: 20,
-            border: "1px solid #d1d5db",
-            borderRadius: "8px",
-            fontSize: "16px",
-          }}
-        />
-
-        <div
-          style={{
-            display: "flex",
-            gap: "12px",
-            marginBottom: 16,
-            flexWrap: "wrap",
-          }}
-        >
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            style={{ padding: "10px", borderRadius: "6px" }}
-          >
-            <option value="">All Categories</option>
-            <option value="Fruit">Fruit</option>
-            <option value="Vegetables">Vegetables</option>
-            <option value="Dairy">Dairy</option>
-            <option value="Meat">Meat</option>
-            <option value="Grains">Grains</option>
-            <option value="Other">Other</option>
-          </select>
-
-          <select
-            value={delivery}
-            onChange={(e) => setDelivery(e.target.value)}
-            style={{ padding: "10px", borderRadius: "6px" }}
-          >
-            <option value="">All Delivery</option>
-            <option value="collection">Collection</option>
-            <option value="delivery">Delivery</option>
-            <option value="both">Both</option>
-          </select>
-
-          <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value)}
-            style={{ padding: "10px", borderRadius: "6px" }}
-          >
-            <option value="">Recommended</option>
-            <option value="price_low">Price: Low → High</option>
-            <option value="price_high">Price: High → Low</option>
-            <option value="distance_near">Distance: Near → Far</option>
-            <option value="distance_far">Distance: Far → Near</option>
-          </select>
-        </div>
-
-        {/* MARKET TICKER */}
-        <MarketTicker tickers={tickers} />
-
-        {/* LISTINGS GRID */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(320px,1fr))",
-            gap: 12,
-            marginTop: 16,
-          }}
-        >
-          {sortedListings.map((l) => {
-            const percent = Math.min((l.qty / maxQty) * 100, 100)
-            return (
-              <div
-                key={l.id}
-                style={{
-                  background: "white",
-                  borderRadius: "10px",
-                  padding: "16px",
-                  boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <img
-                  src={l.image_url || "/placeholder-produce.jpg"}
-                  style={{
-                    width: "100%",
-                    height: "160px",
-                    objectFit: "cover",
-                    borderRadius: "8px",
-                  }}
-                />
-
-                <h3 style={{ fontSize: "18px", fontWeight: 700, marginTop: "10px" }}>
-                  {l.product}
-                </h3>
-
-                <p style={{ color: "#6b7280", fontSize: "14px", marginTop: "4px" }}>
-                  £{l.price.toFixed(2)} per {l.unit}
-                </p>
-
-                <p style={{ color: "#374151", fontSize: "14px", marginTop: "8px" }}>
-                  {l.seller.farmName} — {l.seller.distanceKm} km
-                </p>
-
-                <div style={{ marginTop: "10px" }}>
-                  <div
-                    style={{
-                      height: "8px",
-                      background: "#e5e7eb",
-                      borderRadius: "6px",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <div
-                      style={{
-                        height: "100%",
-                        width: `${percent}%`,
-                        background: "#16a34a",
-                      }}
-                    />
-                  </div>
-                  <p
-                    style={{
-                      marginTop: "6px",
-                      fontSize: "12px",
-                      color: "#6b7280",
-                    }}
-                  >
-                    {l.qty} / {maxQty} {l.unit} available
-                  </p>
-                </div>
-
-                <button
-                  onClick={() => addToBasket(l)}
-                  style={{
-                    marginTop: "12px",
-                    background: "#16a34a",
-                    color: "white",
-                    padding: "10px",
-                    borderRadius: "6px",
-                    fontWeight: 600,
-                    border: "none",
-                    cursor: "pointer",
-                  }}
-                >
-                  Add to Basket
-                </button>
-              </div>
-            )
-          })}
-        </div>
+              View Product
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   )
 }
-
 
 
